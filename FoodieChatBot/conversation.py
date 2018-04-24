@@ -61,10 +61,7 @@ class Conversation(object):
         
         sentence.stemmers = self.stemmer_text_words
          
-        classifier_greeting = greeting.Greeting()
-        sentence.addClass(classifier_greeting.classify(self.stemmer_text_words))
-        #print(accuracy(classifier, test_set))
-
+        self.classify_sentence(sentence)
 
         myIntellect = MyIntellect()
         myIntellect.prepareLogger(self.logger)
@@ -78,6 +75,12 @@ class Conversation(object):
 
         myIntellect.forget_all()
        
+    def classify_sentence(self, sentence):
+        classifier_greeting = greeting.Greeting()
+        sentence.addClass(classifier_greeting.classify(self.stemmer_text_words))
+
+        if len(sentence.classes) == 0:
+            sentence.addClass("unknown")
 
     def dialogue_act_features(self, post):
         features = {}

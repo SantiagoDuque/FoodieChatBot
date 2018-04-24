@@ -26,7 +26,7 @@ rule "greeting_bad_question":
 
 rule "default":
 	when: 
-		$conversation := Context( "greeting_positive" in sentence.classes)
+		$conversation := Context( "unknown" in sentence.classes)
 	then: 
 		out(u"No entiendo lo que dices... \xbfpuedes repetir de otra manera?")
 		log("rule default fired")
