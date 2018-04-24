@@ -1,0 +1,65 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>17c3aedb-0415-40c7-bcb0-c232647979fa</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>console.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>FoodieChatBot</Name>
+    <RootNamespace>FoodieChatBot</RootNamespace>
+    <InterpreterId>Global|PythonCore|2.7-32</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="classifiers\classifier.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="classifiers\greeting.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="classifiers\__init__.py" />
+    <Compile Include="console.py" />
+    <Compile Include="context.py" />
+    <Compile Include="conversation.py" />
+    <Compile Include="FoodieChatBot.py" />
+    <Compile Include="trainset\greeting_train.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="trainset\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utils.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="log.log" />
+    <Content Include="rulesset\rules.policy" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|2.7-32" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="classifiers\" />
+    <Folder Include="trainset\" />
+    <Folder Include="rulesset\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>

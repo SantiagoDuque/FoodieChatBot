@@ -1,0 +1,32 @@
+from context import Context
+from context import Sentence
+#https://github.com/nemonik/Intellect
+
+rule "greeting_positive":
+	when:
+		$conversation := Context( "greeting_positive" in sentence.classes )
+	then:
+		out("Muy bien. Gracias por preguntar")
+		log("rule greeting_positive fired")
+
+rule "greeting_negative":
+	when:
+		$conversation := Context( "greeting_negative" in sentence.classes )
+	then:
+		out("Yo bien. Gracias por preguntar")
+		out("Y como que estas mal?")
+		log("rule greeting_negative fired")
+
+rule "greeting_bad_question":
+	when: 
+		$conversation := Context( sentence.before != None and "greeting_negative" in sentence.before.classes)
+	then: 
+		out("bueno no te preocupes seguro que ir a un restaurante te quita las penas")
+		log("rule greeting_bad_question fired")
+
+rule "default":
+	when: 
+		$conversation := Context( "greeting_positive" in sentence.classes)
+	then: 
+		out(u"No entiendo lo que dices... \xbfpuedes repetir de otra manera?")
+		log("rule default fired")

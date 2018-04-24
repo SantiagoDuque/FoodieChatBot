@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2037
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "FoodieChatBot", "FoodieChatBot\FoodieChatBot.pyproj", "{17C3AEDB-0415-40C7-BCB0-C232647979FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{17C3AEDB-0415-40C7-BCB0-C232647979FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17C3AEDB-0415-40C7-BCB0-C232647979FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0E02A6D4-428C-4696-B48B-F4829E6065BC}
+	EndGlobalSection
+EndGlobal
