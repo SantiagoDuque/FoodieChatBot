@@ -1,0 +1,7 @@
+
+pip install nltk
+pip install anltr3
+pip install intellect
+pip install enum34
+
+u"¬".encode('utf-8')

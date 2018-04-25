@@ -1,21 +1,29 @@
 from context import Context
 from context import Sentence
+import actions
 #https://github.com/nemonik/Intellect
 
 rule "greeting_positive":
 	when:
-		$conversation := Context( "greeting_positive" in sentence.classes )
+		$conversation := Context( sentence.botAction == actions.BotActions.GREETING and  "greeting_positive" in sentence.classes and sentence.userAction ==  actions.UserActions.REPLY_ASNWER )
 	then:
 		out("Muy bien. Gracias por preguntar")
 		log("rule greeting_positive fired")
 
 rule "greeting_negative":
 	when:
-		$conversation := Context( "greeting_negative" in sentence.classes )
+		$conversation := Context( sentence.botAction == actions.BotActions.GREETING and "greeting_negative" in sentence.classes and sentence.userAction ==  actions.UserActions.REPLY_ASNWER )
 	then:
 		out("Yo bien. Gracias por preguntar")
 		out("Y como que estas mal?")
 		log("rule greeting_negative fired")
+
+rule "greeting_no_answer":
+	when:
+		$conversation := Context( sentence.botAction == actions.BotActions.GREETING and sentence.userAction !=  actions.UserActions.REPLY_ASNWER and "unknown" not in sentence.classes )
+	then:
+		out(u"(ironic mode on) Yo tambien estoy bien. Gracias por preguntar \xac\xac (ironic mode off)")
+		log("rule greeting_no_answer fired")
 
 rule "greeting_bad_question":
 	when: 

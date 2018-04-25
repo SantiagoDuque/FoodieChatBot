@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import actions
 class Context:
     @property
     def sentence(self):
@@ -6,11 +7,7 @@ class Context:
 
     @sentence.setter
     def sentence(self, sentence):
-        if self.sentence == None:
-            self.sentence = sentence
-        else:
-            sentence.before = self.sentence
-            self.sentence = sentence
+        self.sentence = sentence
 
     def __init__(self):
         self.sentence = None
@@ -30,7 +27,22 @@ class Context:
         if type_token.lower() == "tokens":
             return all(x in sentence.tokens for x in tokens)
 
+    def addSentence(self, sentence):
+        ret = False
+
+        if self.sentence == None:
+            self.sentence = sentence
+        else:
+            if "unknown" in self.sentence.classes:
+                sentence.botAction = self.sentence.botAction
+                ret = True
+
+            if "unknown" not in self.sentence.classes:
+                sentence.before = self.sentence
+            self.sentence = sentence
    
+        return ret
+
 class Sentence:
     def __init__(self, answer):
         self._tokens = []
@@ -40,10 +52,30 @@ class Sentence:
         self._categories = ""
         self._before = None
         self._classes = []
+        self._userAction = actions.UserActions.NONE
+        self._botAction = actions.BotActions.NONE
 
     def addClass(self, class_sentence):
         if class_sentence != None:
             self.classes.append(class_sentence)
+
+    @property
+    def botAction(self):
+        return self._botAction
+
+    @botAction.setter
+    def botAction(self, value):
+        self._botAction = value
+
+    @property
+    def userAction(self):
+        return self._userAction
+
+    @userAction.setter
+    def userAction(self, value):
+        self._userAction = value
+
+
 
     @property
     def classes(self):

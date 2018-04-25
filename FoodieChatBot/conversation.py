@@ -11,6 +11,7 @@ from nltk.tokenize.toktok import ToktokTokenizer
 from nltk import pos_tag, word_tokenize, sent_tokenize
 from nltk.classify import accuracy
 from classifiers import greeting
+import actions
 
 class MyIntellect(Intellect):
 
@@ -31,9 +32,11 @@ class MyIntellect(Intellect):
 
 class Conversation(object):
 
-    def getNextSentence(self, answer):
+    def getNextSentence(self, answer, botAction = actions.BotActions.NONE):
         self.logger.info("Input sentence " + answer)
         sentence = Sentence(answer)
+        sentence.botAction = botAction
+
 
         tokenizer = ToktokTokenizer()
         self.tokens = []
@@ -68,16 +71,26 @@ class Conversation(object):
 
         policy_d = myIntellect.learn(myIntellect.local_file_uri("./rulesset/rules.policy"))
 
-        self.context.sentence = sentence 
-        myIntellect.learn(self.context)
+        needReClassify = self.context.addSentence(sentence)
+
+        if needReClassify:
+            self.context.sentence.classes = []
+            self.classify_sentence( self.context.sentence)
+
+        policy_applied = myIntellect.learn(self.context)
 
         myIntellect.reason()
 
         myIntellect.forget_all()
        
     def classify_sentence(self, sentence):
-        classifier_greeting = greeting.Greeting()
-        sentence.addClass(classifier_greeting.classify(self.stemmer_text_words))
+
+        if "?" in sentence.stemmers:
+            sentence.userAction = actions.UserActions.REPLY_ASNWER
+
+        if sentence.botAction == actions.BotActions.GREETING:
+            classifier_greeting = greeting.Greeting()
+            sentence.addClass(classifier_greeting.classify(sentence.stemmers))
 
         if len(sentence.classes) == 0:
             sentence.addClass("unknown")

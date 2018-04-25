@@ -22,6 +22,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="actions.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="classifiers\classifier.py">
       <SubType>Code</SubType>
     </Compile>
@@ -42,6 +45,7 @@
     <Compile Include="utils.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="info.txt" />
     <Content Include="log.log" />
     <Content Include="rulesset\rules.policy" />
   </ItemGroup>
