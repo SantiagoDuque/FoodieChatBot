@@ -1,7 +1,11 @@
 
-pip install nltk
-pip install anltr3
-pip install intellect
+pip install nltk 
+
+>>> import nltk
+>>> nltk.download()
+
+instalar antlr3 e intellect en C:\Python27\Lib\site-packages
+
 pip install enum34
 
 u"¬".encode('utf-8')
