@@ -25,12 +25,45 @@ rule "greeting_no_answer":
 		out(u"(ironic mode on) Yo tambien estoy bien. Gracias por preguntar \xac\xac (ironic mode off)")
 		log("rule greeting_no_answer fired")
 
-rule "greeting_bad_question":
+rule "price_caro":
 	when: 
-		$conversation := Context( sentence.before != None and "greeting_negative" in sentence.before.classes)
+		$conversation := Context( "car" in sentence.stemmers and "price" in sentence.classes)
 	then: 
-		out("bueno no te preocupes seguro que ir a un restaurante te quita las penas")
-		log("rule greeting_bad_question fired")
+		addPreference("caro")
+		out("Pillado quieres ir a un sitio caro")
+		log("rule price_caro fired")
+
+rule "price_barato":
+	when: 
+		$conversation := Context( "barat" in sentence.stemmers and "price" in sentence.classes)
+	then: 
+		addPreference("barato")
+		out("Pillado quieres ir a un sitio barato")
+		log("rule price_barato fired")
+
+rule "price_medio1":
+	when: 
+		$conversation := Context( "medio" in sentence.stemmers and "price" in sentence.classes)
+	then: 
+		addPreference("medio")
+		out("Pillado quieres ir a un sitio medio")
+		log("rule price_medio1 fired")
+
+rule "price_medio2":
+	when: 
+		$conversation := Context( "normal" in sentence.stemmers and "price" in sentence.classes)
+	then: 
+		addPreference("medio")
+		out("Pillado quieres ir a un sitio normal")
+		log("rule price_medio2 fired")
+		
+rule "position":
+	when: 
+		$conversation := Context("position" in sentence.classes)
+	then: 
+		addPreference("zipcode")
+		out("Pillado quieres ir cerca de ese codigo postal")
+		log("rule position fired")	
 
 rule "default":
 	when: 

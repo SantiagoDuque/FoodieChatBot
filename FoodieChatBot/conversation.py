@@ -11,11 +11,16 @@ from nltk.tokenize.toktok import ToktokTokenizer
 from nltk import pos_tag, word_tokenize, sent_tokenize
 from nltk.classify import accuracy
 from classifiers import greeting
+from classifiers import preferences
 import actions
+import pandas
+import userStateService
+import restaurantService
 
 class MyIntellect(Intellect):
 
     def __init__(self):
+        self.preferences = None
         return super(MyIntellect, self).__init__()
 
     @Callable
@@ -24,7 +29,11 @@ class MyIntellect(Intellect):
 
     @Callable
     def out(self, text):
-        print(text)
+        print(">>" + text)
+
+    @Callable
+    def addPreference(self, text):
+        self.preferences = text
             
     def prepareLogger(self, logger):
         self.logger = logger
@@ -32,7 +41,62 @@ class MyIntellect(Intellect):
 
 class Conversation(object):
 
+    def pintaRestaurante(self, restaurant):
+        print(">>>>>>>>> Restaurante "+ restaurant.name)
+        print(">>>>>>>>> Cerca de "+ restaurant.address.zipcode)
+        salida = ">>>>>>>>> Donde hacen comida tipo: "
+        for typeFood in restaurant.type_of_food:
+            salida += typeFood + " "
+
+        print(salida)
+        print(">>>>>>>>> " + restaurant.info[:100] + "...")
+
+    def emiteSugerencia(self):
+        #Casos de prueba
+
+        #userState.lastType = "Tapas"
+
+        #userState.lastZipCode = 28005
+
+        #Casos de prueba
+
+        suggestionService = userStateService.SuggestionService()
+        suggestion = suggestionService.get(self.context.userState,self.context.preferences)
+        restaurant_service = restaurantService.ProcesaRestaurantes()
+
+
+        if len(suggestion.restaurant) == 0:
+            print(">>" + "Parece que no hemos encontrado nada acorde a tus preferencias.")
+            print(">>" + "Que te pareceria ir a:")
+            preference_aux = userStateService.Preference()
+            suggestion_aux = suggestionService.get(self.context.userState,preference_aux)
+            if len(suggestion_aux.restaurant) == 0:
+                self.pintaRestaurante(restaurant_service.getRandom())
+            else:
+                self.pintaRestaurante(restaurant_service.getById(int(suggestion_aux.restaurant['id'])))
+        else:
+            print(">>" + suggestion.msg)
+            self.pintaRestaurante(restaurant_service.getById(int(suggestion.restaurant['id'])))
+
+    def forceSuggestion(self):
+       self.emiteSugerencia()
+
+    def addPreference(self, preference):
+        if preference == "caro":
+            self.context.preferences.price = "Caro"
+        if preference == "medio":
+            self.context.preferences.price = "Medio"
+        if preference == "barato":
+            self.context.preferences.price = "Barato"
+        if preference == "zipcode":
+            self.context.preferences.zipCode = int(self.context.sentence.tokens[0][-1])
+
+
     def getNextSentence(self, answer, botAction = actions.BotActions.NONE):
+
+        if answer.strip() == "SUG":
+            return self.forceSuggestion()
+
         self.logger.info("Input sentence " + answer)
         sentence = Sentence(answer)
         sentence.botAction = botAction
@@ -66,22 +130,26 @@ class Conversation(object):
          
         self.classify_sentence(sentence)
 
-        myIntellect = MyIntellect()
-        myIntellect.prepareLogger(self.logger)
-
-        policy_d = myIntellect.learn(myIntellect.local_file_uri("./rulesset/rules.policy"))
-
         needReClassify = self.context.addSentence(sentence)
 
         if needReClassify:
             self.context.sentence.classes = []
             self.classify_sentence( self.context.sentence)
 
-        policy_applied = myIntellect.learn(self.context)
+        if "suggestion" in sentence.classes:
+            return self.forceSuggestion()
 
-        myIntellect.reason()
+        self.myIntellect = MyIntellect()
+        self.myIntellect.prepareLogger(self.logger)
+        self.policy_file = self.myIntellect.local_file_uri("./rulesset/rules.policy")
+        policy_d = self.myIntellect.learn_policy(self.policy_file)
+        policy_applied = self.myIntellect.learn(self.context)
 
-        myIntellect.forget_all()
+        self.myIntellect.reason()
+
+        self.myIntellect.forget_all()
+        
+        self.addPreference(self.myIntellect.preferences)
        
     def classify_sentence(self, sentence):
 
@@ -91,6 +159,10 @@ class Conversation(object):
         if sentence.botAction == actions.BotActions.GREETING:
             classifier_greeting = greeting.Greeting()
             sentence.addClass(classifier_greeting.classify(sentence.stemmers))
+
+        if sentence.botAction == actions.BotActions.NONE:
+            preferences_greeting = preferences.Preferences()
+            sentence.addClass(preferences_greeting.classify(sentence.stemmers))
 
         if len(sentence.classes) == 0:
             sentence.addClass("unknown")
@@ -119,3 +191,7 @@ class Conversation(object):
         self.language = language
         self.context = Context()
         self.logger.info("Set conversation. Language " + self.language)
+
+        
+        
+        

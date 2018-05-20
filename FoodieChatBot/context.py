@@ -1,6 +1,23 @@
 # -*- coding: utf-8 -*-
 import actions
+import userStateService
 class Context:
+    @property
+    def preferences(self):
+        return self.userState
+
+    @preferences.setter
+    def preferences(self, preferences):
+        self.preferences = preferences
+
+    @property
+    def userState(self):
+        return self.userState
+
+    @userState.setter
+    def userState(self, userState):
+        self.userState = userState
+
     @property
     def sentence(self):
         return self.sentence
@@ -11,6 +28,8 @@ class Context:
 
     def __init__(self):
         self.sentence = None
+        self.userState = userStateService.UserState()
+        self.preferences = userStateService.Preference()
         
     def getLastSentence(self):
         return self.sentence
