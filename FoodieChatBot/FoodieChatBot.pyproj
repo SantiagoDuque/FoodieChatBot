@@ -25,9 +25,6 @@
     <Compile Include="actions.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="classifiers\classifier.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="classifiers\preferences.py" />
     <Compile Include="classifiers\greeting.py">
       <SubType>Code</SubType>
@@ -36,7 +33,6 @@
     <Compile Include="console.py" />
     <Compile Include="context.py" />
     <Compile Include="conversation.py" />
-    <Compile Include="FoodieChatBot.py" />
     <Compile Include="restaurante.py" />
     <Compile Include="restaurantService.py" />
     <Compile Include="trainset\preferences_train.py" />

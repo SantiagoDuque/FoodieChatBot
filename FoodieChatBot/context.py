@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 import actions
 import userStateService
+
+
+#clase que almacena el contexto de nuestra conversacio
+#se compone del estado de usuario userstate (donde guardamos las preferencias, resturantes visitados...)
+# preferencias solicitadas, la frase introducida
 class Context:
     @property
     def preferences(self):
-        return self.userState
+        return self.preferences
 
     @preferences.setter
     def preferences(self, preferences):
@@ -62,17 +67,19 @@ class Context:
    
         return ret
 
+
+#clase principla donde almacenamos la informacion de la frase introducida
 class Sentence:
     def __init__(self, answer):
-        self._tokens = []
+        self._tokens = [] 
         self._postags = []
         self._stemmers = []
-        self._answer = answer
+        self._answer = answer #frase tal cual se intrudujo
         self._categories = ""
-        self._before = None
+        self._before = None #sentence anterior se usa paar almacenar el contexto
         self._classes = []
-        self._userAction = actions.UserActions.NONE
-        self._botAction = actions.BotActions.NONE
+        self._userAction = actions.UserActions.NONE #acciones del usuario 
+        self._botAction = actions.BotActions.NONE #acciones del bot 
 
     def addClass(self, class_sentence):
         if class_sentence != None:
@@ -93,8 +100,6 @@ class Sentence:
     @userAction.setter
     def userAction(self, value):
         self._userAction = value
-
-
 
     @property
     def classes(self):

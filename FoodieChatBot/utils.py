@@ -1,5 +1,7 @@
 import sys
 
+#fichero de utilidades
+
 def listToString(list):
     return ' '.join([str(x) for x in list])
 
