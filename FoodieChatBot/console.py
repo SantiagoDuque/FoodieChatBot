@@ -21,7 +21,7 @@ def main():
     answer = firstDialog(conversation)
 
     #Mientras no salgas del dialogo
-    while answer.lower() != "exit\n":
+    while answer.lower().strip() != "exit":
         answer = utils.input()
         #se envia lo recogido por consola a nuestra conversacion 
         conversation.getNextSentence(answer)
